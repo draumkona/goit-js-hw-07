@@ -1,6 +1,9 @@
 import { galleryItems } from './gallery-items.js';
 // Change code below this line
+
 const gallery = document.querySelector(".gallery");
+let instance = basicLightbox.create(`<img src="" alt=""`);
+
 const galleryOfObjects = galleryItems
     .map((image) => `
     <div class="gallery__item">
@@ -16,19 +19,22 @@ const galleryOfObjects = galleryItems
 
 gallery.insertAdjacentHTML("afterbegin", galleryOfObjects);
 
-gallery.addEventListener("click", handleClick);
-
 function handleClick(event) { 
+     if (event.target.nodeName !== "IMG") {
+    return;
+  }
     event.preventDefault();
 
-    const instance = basicLightbox.create(`
+    instance = basicLightbox.create(`
      <img src=${event.target.getAttribute("data-source")} alt="${event.target.getAttribute("alt")}" >
-    `)
+    `);
 
-    instance.show()
-    
-    document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && instance.visible()) instance.close();
-  })
+    instance.show();
 };
 
+gallery.addEventListener("click", handleClick);
+
+document.addEventListener("keydown", (event) => {
+    console.log('fngjg')
+    if (event.key === "Escape" && instance.visible()) instance.close();
+});
